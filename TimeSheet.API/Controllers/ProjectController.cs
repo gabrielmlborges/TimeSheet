@@ -24,12 +24,4 @@ public class ProjectController : ControllerBase
 
         return Ok(result);
     }
-
-    [HttpPost("{projectId}/employees")]
-    public async Task<ActionResult> AssignEmployees(Guid projectId, [FromBody] AssignEmployeesRequestDTO request)
-    {
-        await _projectService.AssignMultiple(projectId, request);
-
-        return Ok("Deu certo!!! (eu acho)");
-    }
 }

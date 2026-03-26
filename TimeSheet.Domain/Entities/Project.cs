@@ -4,7 +4,7 @@ public class Project
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }
-    public required int TotalHours { get; set; }
+    public int TotalHours { get; set; }
     private readonly List<ProjectAssignment> _assignments = new();
     public virtual IReadOnlyCollection<ProjectAssignment> Assignments => _assignments.AsReadOnly();
     private readonly List<ProjectActivity> _activities = new();

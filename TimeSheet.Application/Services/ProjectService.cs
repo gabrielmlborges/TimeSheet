@@ -25,18 +25,6 @@ public class ProjectService : IProjectService
         await _projectRepository.AddAsync(project);
         await _projectRepository.SaveChangesAsync();
 
-        return new CreateProjectResponseDTO(project.Id, project.Name);
-    }
-
-    public async Task AssignMultiple(Guid id, AssignEmployeesRequestDTO dto)
-    {
-        await _projectRepository.AssignMultipleAsync(id, dto.UsersIds);
-        await _projectRepository.SaveChangesAsync();
-    }
-
-    public async Task UnassignEmployee(UnassignEmployeesRequestDTO dto)
-    {
-        await _projectRepository.UnassignEmployeeAsync(dto.ProjectId, dto.UserId);
-        await _projectRepository.SaveChangesAsync();
+        return new CreateProjectResponseDTO(project.Id);
     }
 }
