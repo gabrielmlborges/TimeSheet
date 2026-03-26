@@ -2,10 +2,10 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
 COPY ["TimeSheet.slnx", "./"]
-COPY ["TimeSheet.API/TimeSheet.API.csproj", "API/"]
-COPY ["TimeSheet.Application/TimeSheet.Application.csproj", "Application/"]
-COPY ["TimeSheet.Domain/TimeSheet.Domain.csproj", "Domain/"]
-COPY ["TimeSheet.Infrastructure/TimeSheet.Infrastructure.csproj", "Infrastructure/"]
+COPY ["TimeSheet.API/TimeSheet.API.csproj", "TimeSheet.API/"]
+COPY ["TimeSheet.Application/TimeSheet.Application.csproj", "TimeSheet.Application/"]
+COPY ["TimeSheet.Domain/TimeSheet.Domain.csproj", "TimeSheet.Domain/"]
+COPY ["TimeSheet.Infrastructure/TimeSheet.Infrastructure.csproj", "TimeSheet.Infrastructure/"]
 
 RUN dotnet restore
 
