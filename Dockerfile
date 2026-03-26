@@ -10,7 +10,7 @@ COPY ["TimeSheet.Infrastructure/TimeSheet.Infrastructure.csproj", "TimeSheet.Inf
 RUN dotnet restore
 
 COPY . .
-WORKDIR "/src/API"
+WORKDIR "/src/TimeSheet.API"
 
 RUN dotnet build "TimeSheet.API.csproj" -c Release -o /app/build
 
