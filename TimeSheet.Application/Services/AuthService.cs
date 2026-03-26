@@ -47,19 +47,4 @@ public class AuthService : IAuthService
 
         return new LoginResponseDTO(user.Id, user.Email, user.Role.ToString(), token);
     }
-
-    public async Task<bool> ChangePasswordAsync(Guid userId, ChangePasswordRequestDTO dto)
-    {
-        var user = await _userRepository.GetByIdAsync(userId);
-
-        if (user == null || !_passwordHasher.Verify(dto.Password, user.PasswordHash)) return false;
-
-        if (dto.NewPassword != dto.ConfirmNewPassword) return false;
-
-        user.PasswordHash = _passwordHasher.Hash(dto.NewPassword);
-
-        await _userRepository.SaveChangesAsync();
-
-        return true;
-    }
 }
