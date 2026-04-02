@@ -41,5 +41,20 @@ public class TimeSheetDbContext : DbContext
         modelBuilder.Entity<ProjectAssignment>()
             .Property(pa => pa.IsActive)
             .HasDefaultValue(true);
+
+        modelBuilder.Entity<Activity>(entity =>
+                {
+                    entity.Property(a => a.Name)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                    entity.HasIndex(a => a.Name)
+                    .IsUnique();
+                });
+
+        modelBuilder.Entity<Project>()
+            .Property(p => p.Name)
+            .HasMaxLength(100)
+            .IsRequired();
     }
 }

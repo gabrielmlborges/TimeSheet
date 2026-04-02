@@ -5,10 +5,10 @@ public class ProjectAssignment
     public Guid Id { get; set; }
 
     public Guid ProjectId { get; set; }
-    public required Project Project { get; set; }
+    public Project Project { get; set; } = null!;
 
     public Guid UserId { get; set; }
-    public required User User { get; set; }
+    public User User { get; set; } = null!;
 
     public DateTime StartDate = DateTime.UtcNow;
     public DateTime EndDate { get; set; }
