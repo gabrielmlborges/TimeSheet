@@ -1,3 +1,5 @@
+using TimeSheet.Domain.Exceptions;
+
 namespace TimeSheet.API.Middlewares;
 
 public class ExceptionMiddleware
@@ -24,14 +26,16 @@ public class ExceptionMiddleware
 
         context.Response.StatusCode = exception switch
         {
-            InvalidOperationException => 400,
-            KeyNotFoundException => 404,
+            NotFoundException => 404,
+            InvalidCredentialsException => 401,
+            ConflictException => 409,
             _ => 500
         };
 
-        return context.Response.WriteAsJsonAsync(new { 
-            error = exception.Message, 
-            status = context.Response.StatusCode 
+        return context.Response.WriteAsJsonAsync(new
+        {
+            error = exception.Message,
+            status = context.Response.StatusCode
         });
     }
 }

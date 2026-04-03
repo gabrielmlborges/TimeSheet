@@ -2,7 +2,7 @@ using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TimeSheet.Controllers;
+namespace TimeSheet.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

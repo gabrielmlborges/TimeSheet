@@ -2,6 +2,7 @@ using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Domain.Entities;
 using TimeSheet.Domain.Enums;
+using TimeSheet.Domain.Exceptions;
 
 namespace TimeSheet.Application.Services;
 
@@ -20,7 +21,10 @@ public class AuthService : IAuthService
 
     public async Task<RegisterResponseDTO?> RegisterAsync(RegisterRequestDTO dto)
     {
-        if (await _userRepository.ExistsByEmailAsync(dto.Email)) return null;
+        if (await _userRepository.ExistsByEmailAsync(dto.Email))
+        {
+            throw new ConflictException("E-mail ja esta cadastrado no sistema");
+        }
 
         var user = new User
         {
@@ -41,7 +45,10 @@ public class AuthService : IAuthService
     {
         var user = await _userRepository.GetByEmailAsync(dto.Email);
 
-        if (user == null || !_passwordHasher.Verify(dto.Password, user.PasswordHash)) return null;
+        if (user == null || !_passwordHasher.Verify(dto.Password, user.PasswordHash))
+        {
+            throw new InvalidCredentialsException();
+        }
 
         var token = _tokenService.GenerateToken(user);
 

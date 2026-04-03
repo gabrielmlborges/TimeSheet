@@ -1,6 +1,7 @@
 using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Domain.Entities;
+using TimeSheet.Domain.Exceptions;
 
 namespace TimeSheet.Application.Services;
 
@@ -19,7 +20,7 @@ public class ActivityService : IActivityService
 
         if (exists)
         {
-            throw new InvalidOperationException("Já existe uma atividade com esse nome!");
+            throw new ConflictException("Ja existe uma atividade cadastrada com esse nome");
         }
         var activity = new Activity
         {

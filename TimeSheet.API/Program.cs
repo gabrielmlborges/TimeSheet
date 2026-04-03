@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TimeSheet.Infrastructure.Data;
 using TimeSheet.Infrastructure;
 using TimeSheet.Application;
+using TimeSheet.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,13 +17,14 @@ builder.Services.AddApplication();
 
 var allowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<String[]>();
 
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
         {
-        options.AddPolicy("MyPolicies", policy => {
+            options.AddPolicy("MyPolicies", policy =>
+            {
                 policy.WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
                 .AllowAnyMethod();
-                });
+            });
         });
 
 var app = builder.Build();
@@ -33,6 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors();
 app.MapControllers();
 

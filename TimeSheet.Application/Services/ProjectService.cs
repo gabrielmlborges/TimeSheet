@@ -1,6 +1,7 @@
 using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Domain.Entities;
+using TimeSheet.Domain.Exceptions;
 
 namespace TimeSheet.Application.Services;
 
@@ -22,7 +23,7 @@ public class ProjectService : IProjectService
         bool projectIsActive = await _projectRepository.IsActive(dto.Name);
         if (projectIsActive)
         {
-            throw new InvalidOperationException("Já existe um projeto ativo com esse nome!");
+            throw new ConflictException("Ja existe um projeto ativo com esse nome");
         }
 
         var project = new Project
@@ -37,7 +38,7 @@ public class ProjectService : IProjectService
             bool exists = await _activityRepository.ExistsByIdAsync(a);
             if (!exists)
             {
-                throw new InvalidOperationException("Atividade não existe no sistema");
+                throw new NotFoundException("Atividade nao existe no sistema");
             }
             project.AddActivity(a);
         }
@@ -47,7 +48,7 @@ public class ProjectService : IProjectService
             bool exists = await _userRepository.ExistsByIdAsync(u);
             if (!exists)
             {
-                throw new InvalidOperationException("Usuário não existe no sistema");
+                throw new NotFoundException("Usuário não existe no sistema");
             }
             project.AssignUser(u);
         }
