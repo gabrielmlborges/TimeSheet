@@ -14,11 +14,9 @@ public class ActivityRepository : IActivityRepository
         _context = context;
     }
 
-    public async Task<Activity?> GetByIdAsync(Guid id) => await _context.Activity.FindAsync(id);
+    public async Task<Activity?> GetByNameAsync(string name) => await _context.Activity.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower());
 
-    public async Task<bool> ExistsByNameAsync(string name) => await _context.Activity.AnyAsync(a => a.Name.ToLower() == name.ToLower());
-
-    public async Task<bool> ExistsByIdAsync(Guid id) => await _context.Activity.AnyAsync(a => a.Id == id);
+    public async Task<int> CountValidIdsAsync(List<Guid> ids) => await _context.Activity.Where(a => ids.Contains(a.Id) && a.IsActive).CountAsync();
 
     public async Task AddAsync(Activity project) => await _context.Activity.AddAsync(project);
 

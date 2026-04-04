@@ -20,18 +20,14 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.RegisterAsync(dto);
 
-        if (result == null) return BadRequest("User already exists or invalid data");
-
         return Ok(result);
     }
 
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] LoginRequestDTO dto)
     {
-        var token = await _authService.LoginAsync(dto);
+        var response = await _authService.LoginAsync(dto);
 
-        if (token == null) return Unauthorized("Invalid e-mail or password");
-
-        return Ok(new { token });
+        return Ok(response);
     }
 }

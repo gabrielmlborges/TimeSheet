@@ -18,6 +18,8 @@ public static class DependencyInjection
 
         services.AddScoped<IActivityRepository, ActivityRepository>();
 
+        services.AddScoped<IProjectAssignmentRepository, ProjectAssignmentRepository>();
+
         return services;
     }
 }

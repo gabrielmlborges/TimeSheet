@@ -16,21 +16,28 @@ public class ActivityService : IActivityService
 
     public async Task<CreateActivityResponseDTO> CreateActivity(CreateActivityRequestDTO dto)
     {
-        bool exists = await _activityRepository.ExistsByNameAsync(dto.Name);
+        var activity = await _activityRepository.GetByNameAsync(dto.Name);
 
-        if (exists)
+        if (activity != null)
         {
-            throw new ConflictException("Ja existe uma atividade cadastrada com esse nome");
+            if (!activity.IsActive)
+            {
+                activity.IsActive = true;
+                await _activityRepository.SaveChangesAsync();
+            }
+
+            return new CreateActivityResponseDTO(activity.Id);
         }
-        var activity = new Activity
+
+        var newActivity = new Activity
         {
             Id = Guid.NewGuid(),
             Name = dto.Name,
         };
 
-        await _activityRepository.AddAsync(activity);
+        await _activityRepository.AddAsync(newActivity);
         await _activityRepository.SaveChangesAsync();
 
-        return new CreateActivityResponseDTO(activity.Id);
+        return new CreateActivityResponseDTO(newActivity.Id);
     }
 }

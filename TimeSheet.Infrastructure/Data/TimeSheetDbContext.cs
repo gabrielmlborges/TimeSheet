@@ -23,24 +23,30 @@ public class TimeSheetDbContext : DbContext
 
         modelBuilder.Entity<TimeLog>(entity =>
                 {
-                entity.HasKey(e => e.Id);
+                    entity.HasKey(e => e.Id);
 
-                entity.HasOne(d => d.ProjectActivity)
-                .WithMany(p => p.TimeLogs)
-                .HasForeignKey(d => new { d.ProjectId, d.ActivityId })
-                .OnDelete(DeleteBehavior.Restrict);
+                    entity.HasOne(d => d.ProjectActivity)
+                    .WithMany(p => p.TimeLogs)
+                    .HasForeignKey(d => new { d.ProjectId, d.ActivityId })
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                entity.Property(e => e.Hours)
-                .HasPrecision(18, 2);
+                    entity.Property(e => e.Hours)
+                    .HasPrecision(18, 2);
                 });
 
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
 
-        modelBuilder.Entity<ProjectAssignment>()
-            .Property(pa => pa.IsActive)
+        modelBuilder.Entity<ProjectAssignment>(entity =>
+        {
+            entity.Property(pa => pa.IsActive)
             .HasDefaultValue(true);
+
+            entity.HasIndex(pa => new { pa.UserId, pa.ProjectId })
+            .IsUnique()
+            .HasFilter("[IsActive] = 1");
+        });
 
         modelBuilder.Entity<Activity>(entity =>
                 {

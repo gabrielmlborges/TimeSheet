@@ -4,9 +4,8 @@ namespace TimeSheet.Application.Interfaces;
 
 public interface IActivityRepository
 {
-    Task<Activity?> GetByIdAsync(Guid id);
-    Task<bool> ExistsByNameAsync(string name);
-    Task<bool> ExistsByIdAsync(Guid id);
+    Task<Activity?> GetByNameAsync(string name);
+    Task<int> CountValidIdsAsync(List<Guid> ids);
     Task AddAsync(Activity activity);
     Task SaveChangesAsync();
 }

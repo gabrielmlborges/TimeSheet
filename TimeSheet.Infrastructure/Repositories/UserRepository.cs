@@ -16,11 +16,9 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByEmailAsync(string email) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-    public async Task<User?> GetByIdAsync(Guid id) => await _context.Users.FindAsync(id);
-
     public async Task<bool> ExistsByEmailAsync(string email) => await _context.Users.AnyAsync(u => u.Email == email);
 
-    public async Task<bool> ExistsByIdAsync(Guid id) => await _context.Users.AnyAsync(u => u.Id == id);
+    public async Task<int> CountValidIdsAsync(List<Guid> ids) => await _context.Users.Where(a => ids.Contains(a.Id)).CountAsync();
 
     public async Task AddAsync(User user) => await _context.Users.AddAsync(user);
 

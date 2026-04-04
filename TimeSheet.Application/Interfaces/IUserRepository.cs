@@ -5,9 +5,8 @@ namespace TimeSheet.Application.Interfaces;
 public interface IUserRepository
 {
     Task<User?> GetByEmailAsync(string email);
-    Task<User?> GetByIdAsync(Guid id);
     Task<bool> ExistsByEmailAsync(string email);
-    Task<bool> ExistsByIdAsync(Guid id);
+    Task<int> CountValidIdsAsync(List<Guid> ids);
     Task AddAsync(User user);
     Task SaveChangesAsync();
 }

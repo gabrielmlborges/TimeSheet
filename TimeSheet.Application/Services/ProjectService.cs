@@ -10,12 +10,14 @@ public class ProjectService : IProjectService
     private readonly IProjectRepository _projectRepository;
     private readonly IUserRepository _userRepository;
     private readonly IActivityRepository _activityRepository;
+    private readonly IProjectAssignmentRepository _projectAssignmentRepository;
 
-    public ProjectService(IProjectRepository projectRepository, IUserRepository userRepository, IActivityRepository activityRepository)
+    public ProjectService(IProjectRepository projectRepository, IUserRepository userRepository, IActivityRepository activityRepository, IProjectAssignmentRepository projectAssignmentRepository)
     {
         _projectRepository = projectRepository;
         _userRepository = userRepository;
         _activityRepository = activityRepository;
+        _projectAssignmentRepository = projectAssignmentRepository;
     }
 
     public async Task<CreateProjectResponseDTO> CreateProject(CreateProjectRequestDTO dto)
@@ -33,29 +35,55 @@ public class ProjectService : IProjectService
             TotalHours = dto.TotalHours
         };
 
-        foreach (Guid a in dto.ActivitiesId)
-        {
-            bool exists = await _activityRepository.ExistsByIdAsync(a);
-            if (!exists)
-            {
-                throw new NotFoundException("Atividade nao existe no sistema");
-            }
-            project.AddActivity(a);
-        }
-
-        foreach (Guid u in dto.UsersId)
-        {
-            bool exists = await _userRepository.ExistsByIdAsync(u);
-            if (!exists)
-            {
-                throw new NotFoundException("Usuário não existe no sistema");
-            }
-            project.AssignUser(u);
-        }
-
         await _projectRepository.AddAsync(project);
         await _projectRepository.SaveChangesAsync();
 
         return new CreateProjectResponseDTO(project.Id);
+    }
+
+    public async Task AddActivitiesToProject(Guid projectId, AddActivitiesToProjectDTO dto)
+    {
+
+        var project = await _projectRepository.GetByIdWithActivitiesAsync(projectId);
+
+        if (project == null || !project.IsActive) throw new NotFoundException("Projeto nao encontrado ou inativo.");
+
+        var validActivitiesCount = await _activityRepository.CountValidIdsAsync(dto.ActivitiesId);
+
+        if (validActivitiesCount != dto.ActivitiesId.Count) throw new NotFoundException("Uma ou mais atividades nao existem no sistema");
+
+
+        foreach (Guid activityId in dto.ActivitiesId)
+        {
+            project.AddActivity(activityId);
+        }
+
+        await _projectRepository.SaveChangesAsync();
+    }
+
+    public async Task AssignUsersToProject(Guid projectId, AssignUsersToProjectDTO dto)
+    {
+        var exists = await _projectRepository.ExistsAndActive(projectId);
+        if (!exists) throw new NotFoundException("Projeto nao encontrado ou inativo.");
+
+        var validUsersCount = await _userRepository.CountValidIdsAsync(dto.UsersId);
+        if (validUsersCount != dto.UsersId.Count) throw new NotFoundException("Um ou mais usuarios nao existem ou estao inativos no sistema");
+
+        var alreadyAssignedIds = await _projectAssignmentRepository.VerifyAssignedUsers(projectId, dto.UsersId);
+        var newUsersToAssign = dto.UsersId.Except(alreadyAssignedIds).ToList();
+
+        foreach (var userId in newUsersToAssign)
+        {
+            var assignment = new ProjectAssignment
+            {
+                ProjectId = projectId,
+                UserId = userId,
+                IsActive = true
+            };
+
+            await _projectAssignmentRepository.AddAsync(assignment);
+        }
+
+        await _projectAssignmentRepository.SaveChangesAsync();
     }
 }

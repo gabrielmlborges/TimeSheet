@@ -20,8 +20,22 @@ public class ProjectController : ControllerBase
     {
         var result = await _projectService.CreateProject(dto);
 
-        if (result == null) return BadRequest("ERROR");
-
         return Ok(result);
+    }
+
+    [HttpPost("{projectId:guid}/activities")]
+    public async Task<ActionResult> AddActivities(Guid projectId, [FromBody] AddActivitiesToProjectDTO dto)
+    {
+        await _projectService.AddActivitiesToProject(projectId, dto);
+
+        return NoContent();
+    }
+
+    [HttpPost("{projectId:guid}/users")]
+    public async Task<ActionResult> AssignUsers(Guid projectId, [FromBody] AssignUsersToProjectDTO dto)
+    {
+        await _projectService.AssignUsersToProject(projectId, dto);
+
+        return NoContent();
     }
 }

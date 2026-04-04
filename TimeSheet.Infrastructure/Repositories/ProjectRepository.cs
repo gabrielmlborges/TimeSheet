@@ -14,16 +14,9 @@ public class ProjectRepository : IProjectRepository
         _context = context;
     }
 
-    public async Task<Project?> GetByIdAsync(Guid id) => await _context.Projects.FindAsync(id);
+    public async Task<Project?> GetByIdWithActivitiesAsync(Guid id) => await _context.Projects.Include(p => p.Activities).FirstOrDefaultAsync(p => p.Id == id);
 
-    public async Task<Project?> GetByIdWithDatailsAsync(Guid id) {
-        return await _context.Projects
-            .Include(p => p.Activities)
-                .ThenInclude(pa => pa.Activity)
-            .Include(p => p.Assignments)
-                .ThenInclude(pa => pa.User)
-            .FirstOrDefaultAsync(p => p.Id == id);
-    }
+    public async Task<bool> ExistsAndActive(Guid id) => await _context.Projects.Where(p => p.IsActive).AnyAsync(p => p.Id == id);
 
     public async Task<bool> IsActive(string name) => await _context.Projects.AnyAsync(p => p.Name == name && p.IsActive);
 
