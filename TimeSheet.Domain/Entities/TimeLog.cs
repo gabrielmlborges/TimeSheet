@@ -7,9 +7,9 @@ public class TimeLog
     public Guid ProjectAssignmentId { get; set; }
     public required ProjectAssignment ProjectAssignment { get; set; }
 
-    public Guid ProjectId { get; set; }
-    public Guid ActivityId { get; set; }
-    public required ProjectActivity ProjectActivity { get; set; }
+    public required Guid ProjectId { get; set; }
+    public required Guid ActivityId { get; set; }
+    public ProjectActivity ProjectActivity { get; set; } = null!;
 
     public required decimal Hours { get; set; }
     public required string Description { get; set; }

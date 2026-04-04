@@ -44,8 +44,8 @@ public class TimeSheetDbContext : DbContext
             .HasDefaultValue(true);
 
             entity.HasIndex(pa => new { pa.UserId, pa.ProjectId })
-            .IsUnique()
-            .HasFilter("[IsActive] = 1");
+            .HasFilter("\"IsActive\" = TRUE")
+            .IsUnique();
         });
 
         modelBuilder.Entity<Activity>(entity =>

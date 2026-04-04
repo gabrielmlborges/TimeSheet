@@ -20,6 +20,8 @@ public static class DependencyInjection
 
         services.AddScoped<IProjectAssignmentRepository, ProjectAssignmentRepository>();
 
+        services.AddScoped<ITimeLogRepository, TimeLogRepository>();
+
         return services;
     }
 }

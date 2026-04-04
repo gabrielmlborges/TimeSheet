@@ -20,6 +20,8 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<bool> IsActive(string name) => await _context.Projects.AnyAsync(p => p.Name == name && p.IsActive);
 
+    public async Task<bool> ActivityIsLinkedAsync(Guid activityId, Guid projectId) => await _context.ProjectActivity.AnyAsync(pa => pa.ActivityId == activityId && pa.ProjectId == projectId && pa.Active);
+
     public async Task AddAsync(Project project) => await _context.Projects.AddAsync(project);
 
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
