@@ -14,6 +14,8 @@ public class ActivityRepository : IActivityRepository
         _context = context;
     }
 
+    public async Task<List<Activity>> GetActivitiesAsync() => await _context.Activity.ToListAsync();
+
     public async Task<Activity?> GetByNameAsync(string name) => await _context.Activity.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower());
 
     public async Task<int> CountValidIdsAsync(List<Guid> ids) => await _context.Activity.Where(a => ids.Contains(a.Id) && a.IsActive).CountAsync();

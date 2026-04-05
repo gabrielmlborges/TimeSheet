@@ -20,6 +20,13 @@ public class ProjectService : IProjectService
         _projectAssignmentRepository = projectAssignmentRepository;
     }
 
+    public async Task<GetAllProjectsResponseDTO> GetAllProjects() => new GetAllProjectsResponseDTO(await _projectRepository.GetAllProjects());
+
+    public async Task<GetUserProjectsResponseDTO> GetUserProjects(Guid userId)
+    {
+        return new GetUserProjectsResponseDTO(await _projectAssignmentRepository.GetUserProjects(userId));
+    }
+
     public async Task<CreateProjectResponseDTO> CreateProject(CreateProjectRequestDTO dto)
     {
         bool projectIsActive = await _projectRepository.IsActive(dto.Name);

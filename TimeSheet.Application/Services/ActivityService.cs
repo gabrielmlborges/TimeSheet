@@ -1,17 +1,25 @@
 using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Domain.Entities;
-using TimeSheet.Domain.Exceptions;
 
 namespace TimeSheet.Application.Services;
 
 public class ActivityService : IActivityService
 {
     private readonly IActivityRepository _activityRepository;
+    private readonly IProjectRepository _projectRepository;
 
-    public ActivityService(IActivityRepository activityRepository)
+    public ActivityService(IActivityRepository activityRepository, IProjectRepository projectRepository)
     {
         _activityRepository = activityRepository;
+        _projectRepository = projectRepository;
+    }
+
+    public async Task<GetAllActivitiesResponseDTO> GetAllActivities() => new GetAllActivitiesResponseDTO(await _activityRepository.GetActivitiesAsync());
+
+    public async Task<GetProjectActivitiesResponseDTO> GetProjectActivities(Guid projectId)
+    {
+        return new GetProjectActivitiesResponseDTO(await _projectRepository.GetProjectActivities(projectId));
     }
 
     public async Task<CreateActivityResponseDTO> CreateActivity(CreateActivityRequestDTO dto)

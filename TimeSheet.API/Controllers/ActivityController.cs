@@ -20,7 +20,13 @@ public class ActivityController : ControllerBase
     {
         var result = await _activityService.CreateActivity(dto);
 
-        if (result == null) return BadRequest("ERROR");
+        return Ok(result);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> GetAll()
+    {
+        var result = await _activityService.GetAllActivities();
 
         return Ok(result);
     }

@@ -14,6 +14,21 @@ public class ProjectRepository : IProjectRepository
         _context = context;
     }
 
+    public async Task<List<Project>> GetAllProjects()
+    {
+
+        return await _context.Projects.ToListAsync();
+    }
+
+    public async Task<List<Activity>> GetProjectActivities(Guid projectId)
+    {
+        return await _context.ProjectActivity
+            .Include(pa => pa.Activity)
+            .Where(pa => pa.ProjectId == projectId)
+            .Select(pa => pa.Activity)
+            .ToListAsync();
+    }
+
     public async Task<Project?> GetByIdWithActivitiesAsync(Guid id) => await _context.Projects.Include(p => p.Activities).FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<bool> ExistsAndActive(Guid id) => await _context.Projects.Where(p => p.IsActive).AnyAsync(p => p.Id == id);

@@ -9,4 +9,8 @@ public interface IProjectService
     Task AddActivitiesToProject(Guid projectId, AddActivitiesToProjectDTO dto);
 
     Task AssignUsersToProject(Guid projectId, AssignUsersToProjectDTO dto);
+
+    Task<GetUserProjectsResponseDTO> GetUserProjects(Guid userId);
+
+    Task<GetAllProjectsResponseDTO> GetAllProjects();
 }

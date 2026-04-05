@@ -18,6 +18,10 @@ public class TimeLogService : ITimeLogService
         _projectRepository = projectRepository;
     }
 
+    public async Task<GetUserLogsResponseDTO> GetUserLogs(Guid userId, GetUserLogsRequestDTO dto)
+    {
+        return new GetUserLogsResponseDTO(await _timeLogRepository.GetUserLogs(userId, dto.StartDate, dto.EndDate));
+    }
     public async Task<CreateTimeLogResponseDTO> CreateTimeLog(Guid userId, CreateTimeLogRequestDTO dto)
     {
         ProjectAssignment pa = await _projectAssignmentRepository.GetActiveAssignmentAsync(userId, dto.ProjectId);

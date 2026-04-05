@@ -24,4 +24,13 @@ public class TimeLogController : ApiControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult> GetAllLogsFromUser([FromQuery] GetUserLogsRequestDTO dto)
+    {
+        var result = await _timelogService.GetUserLogs(UserId, dto);
+
+        return Ok(result);
+    }
 }

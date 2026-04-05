@@ -26,6 +26,15 @@ public class ProjectAssignmentRepository : IProjectAssignmentRepository
             .ToListAsync();
     }
 
+    public async Task<List<Project>> GetUserProjects(Guid userId)
+    {
+        return await _context.ProjectAssignment
+            .Where(pa => pa.UserId == userId
+                    && pa.IsActive)
+            .Select(pa => pa.Project)
+            .ToListAsync();
+    }
+
     public async Task AddAsync(ProjectAssignment pa) => await _context.AddAsync(pa);
 
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();

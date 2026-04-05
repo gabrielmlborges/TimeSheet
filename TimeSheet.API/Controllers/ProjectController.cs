@@ -6,13 +6,39 @@ namespace TimeSheet.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProjectController : ControllerBase
+public class ProjectController : ApiControllerBase
 {
     private readonly IProjectService _projectService;
+    private readonly IActivityService _activityService;
 
-    public ProjectController(IProjectService projectService)
+    public ProjectController(IProjectService projectService, IActivityService activityService)
     {
         _projectService = projectService;
+        _activityService = activityService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> GetAll()
+    {
+        var result = await _projectService.GetAllProjects();
+
+        return Ok(result);
+    }
+
+    [HttpGet("me")]
+    public async Task<ActionResult> GetUserProjects()
+    {
+        var result = await _projectService.GetUserProjects(UserId);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{projectId:Guid}/activities")]
+    public async Task<ActionResult> GetProjectActivities(Guid projectId)
+    {
+        var result = await _activityService.GetProjectActivities(projectId);
+
+        return Ok(result);
     }
 
     [HttpPost]
