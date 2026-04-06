@@ -8,17 +8,26 @@ public class ActivityService : IActivityService
 {
     private readonly IActivityRepository _activityRepository;
     private readonly IProjectRepository _projectRepository;
+    private readonly IProjectAssignmentRepository _projectAssignmentRepository;
 
-    public ActivityService(IActivityRepository activityRepository, IProjectRepository projectRepository)
+    public ActivityService(IActivityRepository activityRepository, IProjectRepository projectRepository, IProjectAssignmentRepository projectAssignmentRepository)
     {
         _activityRepository = activityRepository;
         _projectRepository = projectRepository;
+        _projectAssignmentRepository = projectAssignmentRepository;
     }
 
     public async Task<GetAllActivitiesResponseDTO> GetAllActivities() => new GetAllActivitiesResponseDTO(await _activityRepository.GetActivitiesAsync());
 
-    public async Task<GetProjectActivitiesResponseDTO> GetProjectActivities(Guid projectId)
+    public async Task<GetProjectActivitiesResponseDTO> GetProjectActivities(Guid projectId, Guid userId)
     {
+        var isMember = await _projectAssignmentRepository.IsUserMember(projectId, userId);
+
+        if (!isMember)
+        {
+            throw new UnauthorizedAccessException("Usuário não tem permissão para ver este projeto.");
+        }
+
         return new GetProjectActivitiesResponseDTO(await _projectRepository.GetProjectActivities(projectId));
     }
 

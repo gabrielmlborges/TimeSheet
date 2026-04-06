@@ -28,6 +28,13 @@ builder.Services.AddAuthentication(options =>
                 };
             });
 
+var authBuilder = builder.Services.AddAuthorizationBuilder();
+
+authBuilder
+    .AddPolicy("AdminOnly", policy => policy
+            .RequireRole("Admin"));
+
+
 
 
 builder.Services.AddControllers();
@@ -53,15 +60,16 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("MyPolicies");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<ExceptionMiddleware>();
-app.UseCors();
 app.MapControllers();
 
 // Aplicar migrations automaticamente no início

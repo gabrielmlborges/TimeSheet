@@ -1,6 +1,7 @@
 using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TimeSheet.API.Controllers;
 
@@ -18,6 +19,7 @@ public class ProjectController : ApiControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> GetAll()
     {
         var result = await _projectService.GetAllProjects();
@@ -26,6 +28,7 @@ public class ProjectController : ApiControllerBase
     }
 
     [HttpGet("me")]
+    [Authorize]
     public async Task<ActionResult> GetUserProjects()
     {
         var result = await _projectService.GetUserProjects(UserId);
@@ -34,14 +37,16 @@ public class ProjectController : ApiControllerBase
     }
 
     [HttpGet("{projectId:Guid}/activities")]
+    [Authorize]
     public async Task<ActionResult> GetProjectActivities(Guid projectId)
     {
-        var result = await _activityService.GetProjectActivities(projectId);
+        var result = await _activityService.GetProjectActivities(projectId, UserId);
 
         return Ok(result);
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> Create([FromBody] CreateProjectRequestDTO dto)
     {
         var result = await _projectService.CreateProject(dto);
@@ -50,6 +55,7 @@ public class ProjectController : ApiControllerBase
     }
 
     [HttpPost("{projectId:guid}/activities")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> AddActivities(Guid projectId, [FromBody] AddActivitiesToProjectDTO dto)
     {
         await _projectService.AddActivitiesToProject(projectId, dto);
@@ -58,6 +64,7 @@ public class ProjectController : ApiControllerBase
     }
 
     [HttpPost("{projectId:guid}/users")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> AssignUsers(Guid projectId, [FromBody] AssignUsersToProjectDTO dto)
     {
         await _projectService.AssignUsersToProject(projectId, dto);

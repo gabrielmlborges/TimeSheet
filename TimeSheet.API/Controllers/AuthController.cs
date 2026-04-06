@@ -1,6 +1,7 @@
 using TimeSheet.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using TimeSheet.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TimeSheet.API.Controllers;
 
@@ -16,6 +17,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> Register([FromBody] RegisterRequestDTO dto)
     {
         var result = await _authService.RegisterAsync(dto);

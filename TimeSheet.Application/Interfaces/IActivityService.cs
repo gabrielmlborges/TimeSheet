@@ -6,5 +6,5 @@ public interface IActivityService
 {
     Task<CreateActivityResponseDTO> CreateActivity(CreateActivityRequestDTO dto);
     Task<GetAllActivitiesResponseDTO> GetAllActivities();
-    Task<GetProjectActivitiesResponseDTO> GetProjectActivities(Guid projectId);
+    Task<GetProjectActivitiesResponseDTO> GetProjectActivities(Guid projectId, Guid userId);
 }

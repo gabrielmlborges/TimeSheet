@@ -1,6 +1,7 @@
 using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TimeSheet.API.Controllers;
 
@@ -16,6 +17,7 @@ public class ActivityController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> Create([FromBody] CreateActivityRequestDTO dto)
     {
         var result = await _activityService.CreateActivity(dto);
@@ -24,6 +26,7 @@ public class ActivityController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> GetAll()
     {
         var result = await _activityService.GetAllActivities();

@@ -35,6 +35,14 @@ public class ProjectAssignmentRepository : IProjectAssignmentRepository
             .ToListAsync();
     }
 
+    public async Task<bool> IsUserMember(Guid projectId, Guid userId)
+    {
+        return await _context.ProjectAssignment
+            .AnyAsync(pa => pa.UserId == userId
+                    && pa.ProjectId == projectId
+                    && pa.IsActive);
+    }
+
     public async Task AddAsync(ProjectAssignment pa) => await _context.AddAsync(pa);
 
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
