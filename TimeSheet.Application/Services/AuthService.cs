@@ -3,6 +3,7 @@ using TimeSheet.Application.Interfaces;
 using TimeSheet.Domain.Entities;
 using TimeSheet.Domain.Enums;
 using TimeSheet.Domain.Exceptions;
+using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Application.Services;
 

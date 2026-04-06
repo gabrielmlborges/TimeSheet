@@ -1,6 +1,7 @@
 using TimeSheet.Application.DTOs;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Domain.Entities;
+using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Application.Services;
 

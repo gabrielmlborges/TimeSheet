@@ -1,6 +1,6 @@
 using TimeSheet.Domain.Entities;
 
-namespace TimeSheet.Application.Interfaces;
+namespace TimeSheet.Domain.Interfaces;
 
 public interface IProjectRepository
 {
