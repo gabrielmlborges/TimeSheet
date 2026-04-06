@@ -3,6 +3,7 @@ using TimeSheet.Application.Interfaces;
 using TimeSheet.Infrastructure.Repositories;
 using TimeSheet.Infrastructure.Authentication;
 using TimeSheet.Infrastructure.Cryptography;
+using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Infrastructure;
 

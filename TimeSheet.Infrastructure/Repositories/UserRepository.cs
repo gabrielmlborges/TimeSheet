@@ -1,4 +1,4 @@
-using TimeSheet.Application.Interfaces;
+using TimeSheet.Domain.Interfaces;
 using TimeSheet.Domain.Entities;
 using TimeSheet.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
