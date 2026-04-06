@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TimeSheet.Controllers;
 
 [ApiController]
-[Route("api/[controlller]")]
+[Route("api/[controller]")]
 
 public class ActivityController : ControllerBase
 {
